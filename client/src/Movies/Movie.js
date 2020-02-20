@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import MovieCard from "./MovieCard";
 
+
 export default class Movie extends React.Component {
   constructor(props) {
     super(props);
@@ -15,16 +16,18 @@ export default class Movie extends React.Component {
     this.fetchMovie(this.props.match.params.id);
   }
 
-  componentDidUpdate() {
-    
-      this.fetchMovie(this.props.match.params.id);
-    
+  componentDidUpdate(newProps) {
+    if(this.props.match.params.id !== newProps.match.params.id){
+    this.fetchMovie(this.props.match.params.id);
+    }
   }
 
   fetchMovie = id => {
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
-      .then(res => this.setState({ movie: res.data }))
+      .then(res => {
+        this.setState({ movie: res.data })
+        console.log("Movie: ", this.state.movie)})
       .catch(err => console.log(err.response));
   };
 
@@ -32,6 +35,25 @@ export default class Movie extends React.Component {
     const addToSavedList = this.props.addToSavedList;
     addToSavedList(this.state.movie);
   };
+
+  
+  editMovie = event => {
+    event.persist();
+    event.preventDefault();
+    this.props.history.push(`/update-movie/${this.state.movie.id}`)
+    //console.log("Edit Movie", this.state.movie)
+    
+  }
+
+  deleteMovie = id => {
+    axios
+      .delete(`http://localhost:5000/api/movies/${this.state.movie.id}`)
+      .then(response => {
+        console.log("response", response.data)
+      .catch(err => console.log("Error", err))
+      })
+    return
+  }
 
 
   render() {
@@ -45,9 +67,8 @@ export default class Movie extends React.Component {
         <div className="save-button" onClick={this.saveMovie}>
           Save
         </div>
-        
-        <div className="update-button" onClick={this.updateMovie}>
-        <Link to={`/update-movies/${this.state.movie.id}`}>Update</Link>
+        <div className="update-button" onClick={() => {this.props.history.push(`/update-movie/${this.state.movie.id}`)}}>
+          Update
         </div>
         <div className="delete-button" onClick={this.deleteMovie}>
           Delete
