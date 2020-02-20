@@ -116,11 +116,11 @@ form {
   flex-direction: column;
   justify-content: center;
   width: 50%;
+  margin: 8%;
 } 
 
 input {
-  flex: 1 1 auto;
-  background-color: cornsilk;
+  background-color: whitesmoke;
   font-size: 1rem;
   height: 50px;
   width: 100%;
@@ -134,12 +134,13 @@ input {
   margin: 24px 0;
 } 
 
-form .update-button-2 {
-  justify-content: right;
-  margin: 2;
-  width: 100%;
-  border: 1px solid grey;
+.update-button-2 {
+  justify-content: center;
+  width: 35%;
+  border: 1px solid black;
   padding: 10px 10px;
+  margin: 0 auto;
+  margin-top: 1%;
   background-color: cornflowerblue;
   font-size: 1rem;
 }

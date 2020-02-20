@@ -1,44 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
-
-const initialItem = {
-    id: "",
+const initialState = {
+    id: Date.now(),
     title: "",
     director: "",
     metascore: "",
     stars: []
+
 }
-
-const UpdateMovie = (props) => {
-    const [item, setItem] = useState(initialItem);
-
-    useEffect(() => {
-        axios
-            .get(`http://localhost:5000/api/movies/${props.match.params.id}`)
-            .then(response => setItem(response.data))
-    }, [props.items, props.match.params.id])
+const AddMovie = (props) => {
+    const [newMovie, setNewMovie] = useState(initialState)
 
     const handleSubmit = event => {
         event.preventDefault();
-        props.updateMovie(item)
+        axios
+            .post(`http://localhost:5000/api/movies`, newMovie)
+            .then(response => {
+                console.log("Add Movie: ", response)
+                setNewMovie(response.data)
+                setNewMovie({
+                    title: "",
+                    director: "",
+                    metascore: "",
+                    stars: []
+                }) 
         props.history.push("/")
-    }
+    })
+}
 
     const handleChange = event => {
-        setItem({...item, [event.target.name]: event.target.value })
+        setNewMovie({...newMovie, [event.target.name]: event.target.value })
     }
-
-    return (
-        <div className="container">
+    return(
+    <div className="container">
             <form onSubmit={handleSubmit}>
-                <h2 className="movie-update">Update Movie</h2>
+                <h2 className="movie-update">Add Movie</h2>
                     <input 
                         type="text"
                         name="title"
                         onChange={handleChange}
                         placeholder="Movie Name"
-                        value={item.title}
+                        value={props.title}
                     />
                     <div />
                     <input 
@@ -46,7 +49,7 @@ const UpdateMovie = (props) => {
                         name="director"
                         onChange={handleChange}
                         placeholder="Director Name"
-                        value={item.director}
+                        value={props.director}
                     />
                     <div />
                     <input 
@@ -54,7 +57,7 @@ const UpdateMovie = (props) => {
                         name="metascore"
                         onChange={handleChange}
                         placeholder="Metascore"
-                        value={item.metascore}
+                        value={props.metascore}
                     />
                     <div />
                     <input 
@@ -62,13 +65,13 @@ const UpdateMovie = (props) => {
                         name="stars"
                         onChange={handleChange}
                         placeholder="Actors Name"
-                        value={[item.stars]}
+                        value={[props.stars]}
                     />
-                    <button className="update-button-2">Update</button>
+                    <button className="update-button-2">Add Movie</button>
                 </form>
             
         </div>
     )
 }
 
-export default UpdateMovie;
+export default AddMovie;

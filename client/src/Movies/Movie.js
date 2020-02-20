@@ -36,13 +36,10 @@ export default class Movie extends React.Component {
     addToSavedList(this.state.movie);
   };
 
-  
   editMovie = event => {
     event.persist();
     event.preventDefault();
     this.props.history.push(`/update-movie/${this.state.movie.id}`)
-    //console.log("Edit Movie", this.state.movie)
-    
   }
 
   deleteMovie = id => {
@@ -54,7 +51,6 @@ export default class Movie extends React.Component {
       })
     return
   }
-
 
   render() {
     if (!this.state.movie) {
