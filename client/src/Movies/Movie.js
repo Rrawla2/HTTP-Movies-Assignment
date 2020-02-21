@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import MovieCard from "./MovieCard";
 
@@ -47,10 +46,13 @@ export default class Movie extends React.Component {
       .delete(`http://localhost:5000/api/movies/${this.state.movie.id}`)
       .then(response => {
         console.log("response", response.data)
-      .catch(err => console.log("Error", err))
+        this.setState(!this.setState)
       })
-    return
-  }
+      .catch(err => console.log("Error", err))
+      this.props.history.push("/movies")
+    }
+   
+  
 
   render() {
     if (!this.state.movie) {
