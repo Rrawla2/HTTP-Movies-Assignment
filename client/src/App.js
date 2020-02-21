@@ -4,12 +4,13 @@ import SavedList from "./Movies/SavedList";
 import MovieList from "./Movies/MovieList";
 import Movie from "./Movies/Movie";
 import UpdateMovie from "./Movies/UpdateMovie";
-import AddMovie from "./Movies/AddMovie";
+//import AddMovie from "./Movies/AddMovie";
 import axios from "axios";
 
 const App = () => {
   const [savedList, setSavedList] = useState([]);
   const [movie, setMovie] = useState([]);
+  //const [newMovie] = useState([]);
 
   const addToSavedList = movie => {
     setSavedList([...savedList, movie]);
@@ -43,12 +44,12 @@ const App = () => {
           return <UpdateMovie {...props} updateMovie={updateMovie} savedList={savedList} addToSavedList={addToSavedList} />
         }}
         />
-      <Route
-        path="/add-movie/"
+      {/* <Route
+        path="/add-movie"
         render={props => {
-          return <AddMovie {...props}  />
+          return <AddMovie {...props}  newMovie={newMovie}/>
         }}
-      />
+      /> */}
     </>
   );
 };
