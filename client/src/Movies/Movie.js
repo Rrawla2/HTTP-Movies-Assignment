@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import MovieCard from "./MovieCard";
+
+
 export default class Movie extends React.Component {
   constructor(props) {
     super(props);
@@ -13,16 +15,18 @@ export default class Movie extends React.Component {
     this.fetchMovie(this.props.match.params.id);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.match.params.id !== newProps.match.params.id) {
-      this.fetchMovie(newProps.match.params.id);
+  componentDidUpdate(newProps) {
+    if(this.props.match.params.id !== newProps.match.params.id){
+    this.fetchMovie(this.props.match.params.id);
     }
   }
 
   fetchMovie = id => {
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
-      .then(res => this.setState({ movie: res.data }))
+      .then(res => {
+        this.setState({ movie: res.data })
+        console.log("Movie: ", this.state.movie)})
       .catch(err => console.log(err.response));
   };
 
@@ -30,6 +34,25 @@ export default class Movie extends React.Component {
     const addToSavedList = this.props.addToSavedList;
     addToSavedList(this.state.movie);
   };
+
+  editMovie = event => {
+    event.persist();
+    event.preventDefault();
+    this.props.history.push(`/update-movie/${this.state.movie.id}`)
+  }
+
+  deleteMovie = id => {
+    axios
+      .delete(`http://localhost:5000/api/movies/${this.state.movie.id}`)
+      .then(response => {
+        console.log("response", response.data)
+        this.setState(!this.setState)
+      })
+      .catch(err => console.log("Error", err))
+      this.props.history.push("/movies")
+    }
+   
+  
 
   render() {
     if (!this.state.movie) {
@@ -42,6 +65,13 @@ export default class Movie extends React.Component {
         <div className="save-button" onClick={this.saveMovie}>
           Save
         </div>
+        <div className="update-button" onClick={() => {this.props.history.push(`/update-movie/${this.state.movie.id}`)}}>
+          Update
+        </div>
+        <div className="delete-button" onClick={this.deleteMovie}>
+          Delete
+        </div>
+        
       </div>
     );
   }
